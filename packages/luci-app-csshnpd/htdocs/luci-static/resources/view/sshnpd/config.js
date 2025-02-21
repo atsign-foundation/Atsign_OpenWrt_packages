@@ -40,6 +40,9 @@ return view.extend({
 		s.option(form.Value, 'args', _('Additional arguments'),
 			_('Further command line arguments for the NoPorts daemon'));
 
+		s.option(form.Value, 'otp', _('Enrollment OTP/STP'),
+			_('One Time Passcode (OTP) for device atSign enrollment'));
+
 		o = s.option(form.Flag, 'enabled', _('Enabled'),
 			_('Check here to enable the service'));
 		o.default = '1';

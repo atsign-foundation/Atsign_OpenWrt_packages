@@ -6,6 +6,7 @@
 'require uci';
 'require network';
 
+
 return view.extend({
 	handleCommand: function(exec, args) {
 		var buttons = document.querySelectorAll('.diag-action > .cbi-button');
@@ -30,19 +31,26 @@ return view.extend({
 	},
 
 	load: function() {
-		return Promise.all([
-			uci.load('sshnpd')
-		]);
+		return uci.load('sshnpd').then(function() {
+			var atsign = uci.get_first('sshnpd','','atsign'),
+				keyfile = '/root/.atsign/keys/'+atsign+'_key.atKeys';
+				return L.resolveDefault(fs.stat(keyfile), {});
+		});
 	},
 
 	render: function(res) {
 
-		var atsign = uci.get_first('sshnpd','','atsign'),
+		var has_atkey = res.path,
+			atsign = uci.get_first('sshnpd','','atsign'),
 			device = uci.get_first('sshnpd','','device'),
-			keyfile = '/root/.atsign/keys/'+atsign+'_key.atKeys',
-			keyfound = fs.stat(keyfile);
+			otp = uci.get_first('sshnpd','','otp'),
+			enrollready = atsign && device && otp && !has_atkey,
 
-		var table = E('table', { 'class': 'table' }, [
+			instructions = E('div', { 'class': 'cbi-map-descr'}, _('Press the Enroll button then run this command on a system where '+atsign+' is activated:')),
+
+			enrollcmd = E('code','at_activate approve -a '+atsign+' --arx noports --drx '+device),
+
+			table = E('table', { 'class': 'table' }, [
 				E('tr', { 'class': 'tr' }, [
 					E('td', { 'class': 'td left' }, [
 						E('span', { 'class': 'diag-action' }, [
@@ -53,25 +61,30 @@ return view.extend({
 						])
 					]),
 				])
-			]);
+			]),
 
-		var view = E('div', { 'class': 'cbi-map'}, [
+			cmdwindow = E('div', {'class': 'cbi-section'}, [
+			E('div', { 'id' : 'command-output'},
+				E('textarea', {
+					'id': 'widget.command-output',
+					'style': 'width: 100%; font-family:monospace; white-space:pre',
+					'readonly': true,
+					'wrap': 'on',
+					'rows': '20'
+				})
+			)
+			]),
+
+			view = E('div', { 'class': 'cbi-map'}, [
 			E('h2', {}, [ _('NoPorts atSign Enrollment') ]),
-			E('div', { 'class': 'cbi-map-descr'}, _('Keys are located at: '+keyfile+' and are '+keyfound)),
-			E('div', { 'class': 'cbi-map-descr'}, _('Press the Enroll button then run this command on a system where '+atsign+' is activated:')),
-			E('code','at_activate approve -a '+atsign+' --arx noports --drx '+device),
-			table,
-						E('div', {'class': 'cbi-section'}, [
-				E('div', { 'id' : 'command-output'},
-					E('textarea', {
-						'id': 'widget.command-output',
-						'style': 'width: 100%; font-family:monospace; white-space:pre',
-						'readonly': true,
-						'wrap': 'on',
-						'rows': '20'
-					})
-				)
-			])
+			atsign ? E([]) : E('div', { 'class': 'cbi-map-descr'}, _('atSign must be configured')),
+			device ? E([]) : E('div', { 'class': 'cbi-map-descr'}, _('Device must be configured')),
+			otp ? E([]) : E('div', { 'class': 'cbi-map-descr'}, _('OTP must be configured')),
+			has_atkey ? E('div', { 'class': 'cbi-map-descr'}, _('Existing key found at: '+has_atkey)) : E([]),
+			enrollready ? instructions : E([]),
+			enrollready ? enrollcmd  : E([]),
+			enrollready ? table : E([]),
+			enrollready ? cmdwindow : E([]),
 		]);
 
 		return view;

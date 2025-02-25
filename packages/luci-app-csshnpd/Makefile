@@ -10,6 +10,8 @@ LUCI_PKGARCH:=all
 PKG_LICENSE:=GPL-2.0
 PKG_MAINTAINER:=Chris Swan <chris@atsign.com>
 
+PKG_VERSION:=1.0.0
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

@@ -1,5 +1,5 @@
 #!/bin/sh
-. /lib/functions.sh
+
 enroll_atsign() {
     local section="$1"
 
@@ -40,8 +40,16 @@ enroll_atsign() {
         return 1
     fi
 
+    echo
+    echo "To activate this enrollment run the following command line on a system where the"
+    echo "${atsign} key has been activated:"
+    echo
+    echo "at_activate approve -a ${atsign} --arx noports --drx ${device}"
+    echo
+
     at_activate enroll -a ${atsign} -s ${otp} -p noports -k ${home}/.atsign/keys/${atsign}_key.atKeys -d ${device} -n "sshnp:rw,sshrvd:rw"
 
 }
+
 config_load sshnpd
 config_foreach enroll_atsign sshnpd

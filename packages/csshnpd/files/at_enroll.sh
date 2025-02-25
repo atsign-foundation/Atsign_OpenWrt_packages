@@ -1,5 +1,5 @@
 #!/bin/sh
-
+. /lib/functions.sh
 enroll_atsign() {
     local section="$1"
 
@@ -35,6 +35,10 @@ enroll_atsign() {
         fi
     fi
 
+    if [ ! -d "${home}/.atsign/keys" ]; then
+        mkdir -p "${home}/.atsign/keys"
+    fi
+
     if [ -f "${home}/.atsign/keys/${atsign}_key.atKeys" ]; then
         echo "sshnpd: atsign keys file already present, exiting enrollment"
         return 1
@@ -50,6 +54,5 @@ enroll_atsign() {
     at_activate enroll -a ${atsign} -s ${otp} -p noports -k ${home}/.atsign/keys/${atsign}_key.atKeys -d ${device} -n "sshnp:rw,sshrvd:rw"
 
 }
-
 config_load sshnpd
 config_foreach enroll_atsign sshnpd

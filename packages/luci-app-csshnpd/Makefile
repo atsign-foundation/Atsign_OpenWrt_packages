@@ -3,7 +3,6 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=luci-app-csshnpd
 PKG_LICENSE:=GPL-2.0
 PKG_MAINTAINER:=Chris Swan <chris@atsign.com>
 PKG_RELEASE:=1

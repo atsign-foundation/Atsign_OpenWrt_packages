@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=csshnpd
 PKG_VERSION:=1.0.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-c$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://github.com/atsign-foundation/noports/releases/download/c$(PKG_VERSION)
@@ -41,14 +41,15 @@ endef
 
 define Package/csshnpd/install	
 	$(INSTALL_DIR) \
-	    $(1)/usr/bin \
+		$(1)/usr/bin \
 		$(1)/etc/config \
 		$(1)/etc/init.d
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/sshnpd/sshnpd $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/sshnpd/at_activate $(1)/usr/bin/
+	$(INSTALL_BIN) files/at_enroll.sh $(1)/usr/bin/
 	$(INSTALL_BIN) files/csshnpd.init $(1)/etc/init.d/sshnpd
 	$(INSTALL_CONF) files/csshnpd.config \
-	    $(1)/etc/config/sshnpd
+		$(1)/etc/config/sshnpd
 endef
 
 $(eval $(call BuildPackage,csshnpd))

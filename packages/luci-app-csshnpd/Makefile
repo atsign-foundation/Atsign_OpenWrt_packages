@@ -3,12 +3,13 @@
 
 include $(TOPDIR)/rules.mk
 
+PKG_LICENSE:=GPL-2.0
+PKG_MAINTAINER:=Chris Swan <chris@atsign.com>
+PKG_RELEASE:=1
+
 LUCI_TITLE:=LuCI config app for NoPorts daemon (csshnpd)
 LUCI_DEPENDS:=+luci-base +csshnpd
 LUCI_PKGARCH:=all
-
-PKG_LICENSE:=GPL-2.0
-PKG_MAINTAINER:=Chris Swan <chris@atsign.com>
 
 include ../../luci.mk
 

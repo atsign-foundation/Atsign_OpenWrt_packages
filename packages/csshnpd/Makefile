@@ -23,7 +23,7 @@ CMAKE_OPTIONS += \
 	BUILD_SHARED_LIBS:="OFF" \
 	CMAKE_BUILD_TYPE:="Release" \
 	CMAKE_C_FLAGS:="-std=c99 -Wno-error -Wextra -Werror-implicit-function-declaration -fPIC -fhonour-copts -Wno-calloc-transposed-args" \
-	CMAKE_INSTALL_PREFIX:="${sourceDir}/build/release-static/tmp-install-dir" \
+	CMAKE_INSTALL_PREFIX:="${PKG_BUILD_DIR}/build/release-static/tmp-install-dir" \
 	CMAKE_EXPORT_COMPILE_COMMANDS:="OFF" \
 	ATSDK_BUILD_TESTS:="OFF" \
 	ATSDK_MEMCHECK:="OFF" \

@@ -16,7 +16,25 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-c$(PKG_VERSION)
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
 
-CMAKE_OPTIONS += --workflow --preset openwrt
+CMAKE_OPTIONS += \
+	NOPORTS_MBEDTLS_PATH="deps/mbedtls-src" \
+	NOPORTS_CJSON_PATH="deps/cjson-src" \
+	NOPORTS_ATSDK_PATH="deps/atsdk-src"\
+	BUILD_SHARED_LIBS="OFF" \
+	CMAKE_BUILD_TYPE="Release" \
+	CMAKE_C_FLAGS="-std=c99 -Wno-error -Wextra -Werror-implicit-function-declaration -fPIC -fhonour-copts -Wno-calloc-transposed-args" \
+	CMAKE_INSTALL_PREFIX": "${sourceDir}/build/release-static/tmp-install-dir" \
+	CMAKE_EXPORT_COMPILE_COMMANDS="OFF" \
+	ATSDK_BUILD_TESTS="OFF" \
+	ATSDK_MEMCHECK="OFF" \
+	ENABLE_TESTING="OFF" \
+	ENABLE_PROGRAMS="OFF" \
+	ENABLE_CJSON_TEST="OFF" \
+	CJSON_OVERRIDE_BUILD_SHARED_LIBS="ON" \
+	CJSON_BUILD_SHARED_LIBS="OFF" \
+	BUILD_SHARED_AND_STATIC_LIBS="OFF" \
+	ENABLE_TARGET_EXPORT="OFF" \
+	ENABLE_CJSON_VERSION_SO="OFF"
 
 define Package/csshnpd
 	SECTION:=net

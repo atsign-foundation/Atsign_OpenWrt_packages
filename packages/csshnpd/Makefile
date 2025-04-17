@@ -17,24 +17,26 @@ include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
 
 CMAKE_OPTIONS += \
-	NOPORTS_MBEDTLS_PATH:="deps/mbedtls-src" \
-	NOPORTS_CJSON_PATH:="deps/cjson-src" \
-	NOPORTS_ATSDK_PATH:="deps/atsdk-src"\
-	BUILD_SHARED_LIBS:="OFF" \
-	CMAKE_BUILD_TYPE:="Release" \
-	CMAKE_C_FLAGS:="-std=c99 -Wno-error -Wextra -Werror-implicit-function-declaration -fPIC -fhonour-copts -Wno-calloc-transposed-args" \
-	CMAKE_INSTALL_PREFIX:="${PKG_BUILD_DIR}/build/release-static/tmp-install-dir" \
-	CMAKE_EXPORT_COMPILE_COMMANDS:="OFF" \
-	ATSDK_BUILD_TESTS:="OFF" \
-	ATSDK_MEMCHECK:="OFF" \
-	ENABLE_TESTING:="OFF" \
-	ENABLE_PROGRAMS:="OFF" \
-	ENABLE_CJSON_TEST:="OFF" \
-	CJSON_OVERRIDE_BUILD_SHARED_LIBS:="ON" \
-	CJSON_BUILD_SHARED_LIBS:="OFF" \
-	BUILD_SHARED_AND_STATIC_LIBS:="OFF" \
-	ENABLE_TARGET_EXPORT:="OFF" \
-	ENABLE_CJSON_VERSION_SO:="OFF"
+    -S . \
+	-DCMAKE_C_COMPILER=$(TARGET_CC) \
+	-DNOPORTS_MBEDTLS_PATH="deps/mbedtls-src" \
+	-DNOPORTS_CJSON_PATH="deps/cjson-src" \
+	-DNOPORTS_ATSDK_PATH="deps/atsdk-src"\
+	-DBUILD_SHARED_LIBS="OFF" \
+	-DCMAKE_BUILD_TYPE="Release" \
+	-DCMAKE_C_FLAGS="-std=c99 -Wno-error -Wextra -Werror-implicit-function-declaration -fPIC -fhonour-copts -Wno-calloc-transposed-args" \
+	-DCMAKE_INSTALL_PREFIX="${PKG_BUILD_DIR}/build/release-static/tmp-install-dir" \
+	-DCMAKE_EXPORT_COMPILE_COMMANDS="OFF" \
+	-DATSDK_BUILD_TESTS="OFF" \
+	-DATSDK_MEMCHECK="OFF" \
+	-DENABLE_TESTING="OFF" \
+	-DENABLE_PROGRAMS="OFF" \
+	-DENABLE_CJSON_TEST="OFF" \
+	-DCJSON_OVERRIDE_BUILD_SHARED_LIBS="ON" \
+	-DCJSON_BUILD_SHARED_LIBS="OFF" \
+	-DBUILD_SHARED_AND_STATIC_LIBS="OFF" \
+	-DENABLE_TARGET_EXPORT="OFF" \
+	-DENABLE_CJSON_VERSION_SO="OFF"
 
 define Package/csshnpd
 	SECTION:=net

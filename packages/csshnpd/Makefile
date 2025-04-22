@@ -1,12 +1,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=csshnpd
-PKG_VERSION:=1.0.3
+PKG_VERSION:=1.0.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-c$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://github.com/atsign-foundation/noports/releases/download/c$(PKG_VERSION)
-PKG_HASH:=73a12634fae28ce0e56be68fbd146e757d9df40f125a4316f1067f883a65e4d5
+PKG_HASH:=09fed244bbf8d5bc1a51c3a2d061deebe96345a4c4d0b01cc3446827c4df98a1
 
 PKG_LICENSE:=BSD-3-Clause
 PKG_LICENSE_FILES:=LICENCE
@@ -17,11 +17,26 @@ include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
 
 CMAKE_OPTIONS += \
-		-S . \
-		-DBUILD_SHARED_LIBS=off \
-		-DBUILD_TESTS=off \
-		-DCMAKE_C_COMPILER=$(TARGET_CC) \
-		-DCMAKE_C_FLAGS="-fhonour-copts -Wno-calloc-transposed-args -Wno-error -pthread -lrt"
+    -S . \
+	-DCMAKE_C_COMPILER=$(TARGET_CC) \
+	-DNOPORTS_MBEDTLS_PATH="deps/mbedtls-src" \
+	-DNOPORTS_CJSON_PATH="deps/cjson-src" \
+	-DNOPORTS_ATSDK_PATH="deps/atsdk-src"\
+	-DBUILD_SHARED_LIBS="OFF" \
+	-DCMAKE_BUILD_TYPE="Release" \
+	-DCMAKE_C_FLAGS="-std=c99 -Wno-error -Wextra -Werror-implicit-function-declaration -fPIC -fhonour-copts -Wno-calloc-transposed-args" \
+	-DCMAKE_INSTALL_PREFIX="${PKG_BUILD_DIR}/build/release-static/tmp-install-dir" \
+	-DCMAKE_EXPORT_COMPILE_COMMANDS="OFF" \
+	-DATSDK_BUILD_TESTS="OFF" \
+	-DATSDK_MEMCHECK="OFF" \
+	-DENABLE_TESTING="OFF" \
+	-DENABLE_PROGRAMS="OFF" \
+	-DENABLE_CJSON_TEST="OFF" \
+	-DCJSON_OVERRIDE_BUILD_SHARED_LIBS="ON" \
+	-DCJSON_BUILD_SHARED_LIBS="OFF" \
+	-DBUILD_SHARED_AND_STATIC_LIBS="OFF" \
+	-DENABLE_TARGET_EXPORT="OFF" \
+	-DENABLE_CJSON_VERSION_SO="OFF"
 
 define Package/csshnpd
 	SECTION:=net

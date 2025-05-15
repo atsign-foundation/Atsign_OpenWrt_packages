@@ -1,12 +1,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=csshnpd
-PKG_VERSION:=1.0.4
+PKG_VERSION:=1.0.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-c$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://github.com/atsign-foundation/noports/releases/download/c$(PKG_VERSION)
-PKG_HASH:=09fed244bbf8d5bc1a51c3a2d061deebe96345a4c4d0b01cc3446827c4df98a1
+PKG_HASH:=0f7c8809985688aa80cf10e0c13dd1f40e8fe809925d201641132f865bc38ccc
 
 PKG_LICENSE:=BSD-3-Clause
 PKG_LICENSE_FILES:=LICENCE
@@ -24,7 +24,7 @@ CMAKE_OPTIONS += \
 	-DNOPORTS_ATSDK_PATH="deps/atsdk-src"\
 	-DBUILD_SHARED_LIBS="OFF" \
 	-DCMAKE_BUILD_TYPE="Release" \
-	-DCMAKE_C_FLAGS="-std=c99 -Wno-error -Wextra -Werror-implicit-function-declaration -fPIC -fhonour-copts -Wno-calloc-transposed-args" \
+	-DCMAKE_C_FLAGS="-std=c99 -Wno-error -Wextra -Werror-implicit-function-declaration -fPIC -fhonour-copts" \
 	-DCMAKE_INSTALL_PREFIX="${PKG_BUILD_DIR}/build/release-static/tmp-install-dir" \
 	-DCMAKE_EXPORT_COMPILE_COMMANDS="OFF" \
 	-DATSDK_BUILD_TESTS="OFF" \

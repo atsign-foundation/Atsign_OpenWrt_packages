@@ -1,13 +1,17 @@
+#
+# Copyright (C) 2025 The Atsign Foundation
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=csshnpd
-PKG_VERSION:=1.0.7
+PKG_VERSION:=1.0.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-c$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://github.com/atsign-foundation/noports/releases/download/c$(PKG_VERSION)
-PKG_HASH:=0f7c8809985688aa80cf10e0c13dd1f40e8fe809925d201641132f865bc38ccc
+PKG_HASH:=f579601e47c766ea1531b5d98702c6d7111c700575ae11360b2672c9f9b39d91
 
+PKG_MAINTAINER:=Chris Swan <chris@atsign.com>
 PKG_LICENSE:=BSD-3-Clause
 PKG_LICENSE_FILES:=LICENCE
 

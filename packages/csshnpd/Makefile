@@ -13,7 +13,7 @@ PKG_HASH:=f579601e47c766ea1531b5d98702c6d7111c700575ae11360b2672c9f9b39d91
 
 PKG_MAINTAINER:=Chris Swan <chris@atsign.com>
 PKG_LICENSE:=BSD-3-Clause
-PKG_LICENSE_FILES:=LICENCE
+PKG_LICENSE_FILES:=LICENSE
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-c$(PKG_VERSION)
 
@@ -21,37 +21,29 @@ include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
 
 CMAKE_OPTIONS += \
-    -S . \
-	-DCMAKE_C_COMPILER=$(TARGET_CC) \
-	-DNOPORTS_MBEDTLS_PATH="deps/mbedtls-src" \
-	-DNOPORTS_CJSON_PATH="deps/cjson-src" \
-	-DNOPORTS_ATSDK_PATH="deps/atsdk-src"\
-	-DBUILD_SHARED_LIBS="OFF" \
-	-DCMAKE_BUILD_TYPE="Release" \
-	-DCMAKE_C_FLAGS="-std=c99 -Wno-error -Wextra -Werror-implicit-function-declaration -fPIC -fhonour-copts" \
-	-DCMAKE_INSTALL_PREFIX="${PKG_BUILD_DIR}/build/release-static/tmp-install-dir" \
-	-DCMAKE_EXPORT_COMPILE_COMMANDS="OFF" \
+	-S . \
 	-DATSDK_BUILD_TESTS="OFF" \
 	-DATSDK_MEMCHECK="OFF" \
-	-DENABLE_TESTING="OFF" \
-	-DENABLE_PROGRAMS="OFF" \
-	-DENABLE_CJSON_TEST="OFF" \
-	-DCJSON_OVERRIDE_BUILD_SHARED_LIBS="ON" \
-	-DCJSON_BUILD_SHARED_LIBS="OFF" \
 	-DBUILD_SHARED_AND_STATIC_LIBS="OFF" \
+	-DCMAKE_C_FLAGS="-std=c99 -Wno-error -Wextra -Werror-implicit-function-declaration -fPIC -fhonour-copts" \
+	-DCMAKE_EXPORT_COMPILE_COMMANDS="OFF" \
+	-DCMAKE_INSTALL_PREFIX="${PKG_BUILD_DIR}/build/release-static/tmp-install-dir" \
+	-DENABLE_PROGRAMS="OFF" \
 	-DENABLE_TARGET_EXPORT="OFF" \
-	-DENABLE_CJSON_VERSION_SO="OFF"
+	-DENABLE_TESTING="OFF" \
+	-DNOPORTS_ATSDK_PATH="deps/atsdk-src"
 
 define Package/csshnpd
-	SECTION:=net
-	CATEGORY:=Network
-	TITLE:=NoPorts Daemon
-	URL:=https://noports.com
-	SUBMENU:=SSH
+  SECTION:=net
+  CATEGORY:=Network
+  SUBMENU:=SSH
+  DEPENDS:=+libmbedtls +libjson-c
+  TITLE:=NoPorts Daemon
+  URL:=https://noports.com
 endef
 
 define Package/csshnpd/description
-	A small and portable daemon for NoPorts.
+  A small and portable daemon for NoPorts.
 endef
 
 define Package/csshnpd/conffiles
@@ -59,16 +51,16 @@ define Package/csshnpd/conffiles
 endef
 
 define Package/csshnpd/install	
-	$(INSTALL_DIR) \
-		$(1)/usr/bin \
-		$(1)/etc/config \
-		$(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/sshnpd/sshnpd $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/sshnpd/at_activate $(1)/usr/bin/
-	$(INSTALL_BIN) files/at_enroll.sh $(1)/usr/bin/
-	$(INSTALL_BIN) files/csshnpd.init $(1)/etc/init.d/sshnpd
-	$(INSTALL_CONF) files/csshnpd.config \
-		$(1)/etc/config/sshnpd
+	$(INSTALL_BIN) ./files/at_enroll.sh $(1)/usr/bin/
+
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_CONF) ./files/csshnpd.config $(1)/etc/config/sshnpd
+	
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/csshnpd.init $(1)/etc/init.d/sshnpd
 endef
 
 $(eval $(call BuildPackage,csshnpd))

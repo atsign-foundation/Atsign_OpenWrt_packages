@@ -4,12 +4,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=csshnpd
-PKG_VERSION:=1.0.8
+PKG_VERSION:=1.0.10
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-c$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://github.com/atsign-foundation/noports/releases/download/c$(PKG_VERSION)
-PKG_HASH:=f579601e47c766ea1531b5d98702c6d7111c700575ae11360b2672c9f9b39d91
+PKG_HASH:=1b20f85482a81c01771e9d2c7056e4bfd205b696fb9ce4f51ed4de8dfcaef69f
 
 PKG_MAINTAINER:=Chris Swan <chris@atsign.com>
 PKG_LICENSE:=BSD-3-Clause

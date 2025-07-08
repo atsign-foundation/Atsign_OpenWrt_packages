@@ -9,19 +9,19 @@
 
 return view.extend({
 	handleCommand: function(exec, args) {
-		var buttons = document.querySelectorAll('.diag-action > .cbi-button');
+		let buttons = document.querySelectorAll('.diag-action > .cbi-button');
 
-		for (var i = 0; i < buttons.length; i++)
+		for (let i = 0; i < buttons.length; i++)
 			buttons[i].setAttribute('disabled', 'true');
 
 		return fs.exec(exec, args).then(function(res) {
-			var out = document.querySelector('textarea');
+			let out = document.querySelector('textarea');
 
 			dom.content(out, [ res.stdout || '', res.stderr || '' ]);
 		}).catch(function(err) {
 			ui.addNotification(null, E('p', [ err ]))
 		}).finally(function() {
-			for (var i = 0; i < buttons.length; i++)
+			for (let i = 0; i < buttons.length; i++)
 				buttons[i].removeAttribute('disabled');
 		});
 	},
@@ -32,7 +32,7 @@ return view.extend({
 
 	load: function() {
 		return uci.load('sshnpd').then(function() {
-			var atsign = uci.get_first('sshnpd','','atsign'),
+			let atsign = uci.get_first('sshnpd','','atsign'),
 				keyfile = '/root/.atsign/keys/'+atsign+'_key.atKeys';
 				return L.resolveDefault(fs.stat(keyfile), {});
 		});
@@ -40,17 +40,17 @@ return view.extend({
 
 	render: function(res) {
 
-		var has_atkey = res.path,
-			atsign = uci.get_first('sshnpd','','atsign'),
-			device = uci.get_first('sshnpd','','device'),
-			otp = uci.get_first('sshnpd','','otp'),
-			enrollready = atsign && device && otp && !has_atkey,
+		const has_atkey = res.path;
+		const atsign = uci.get_first('sshnpd','','atsign');
+		const device = uci.get_first('sshnpd','','device');
+		const otp = uci.get_first('sshnpd','','otp');
+		const enrollready = atsign && device && otp && !has_atkey;
 
-			instructions = E('div', { 'class': 'cbi-map-descr'}, _('Press the Enroll button then run this command on a system where '+atsign+' is activated:')),
+		const instructions = E('div', { 'class': 'cbi-map-descr'}, _('Press the Enroll button then run this command on a system where '+atsign+' is activated:'));
 
-			enrollcmd = E('code','at_activate approve -a '+atsign+' --arx noports --drx '+device),
+		const enrollcmd = E('code','at_activate approve -a '+atsign+' --arx noports --drx '+device);
 
-			table = E('table', { 'class': 'table' }, [
+		let table = E('table', { 'class': 'table' }, [
 				E('tr', { 'class': 'tr' }, [
 					E('td', { 'class': 'td left' }, [
 						E('span', { 'class': 'diag-action' }, [
@@ -61,9 +61,9 @@ return view.extend({
 						])
 					]),
 				])
-			]),
+			]);
 
-			cmdwindow = E('div', {'class': 'cbi-section'}, [
+		const cmdwindow = E('div', {'class': 'cbi-section'}, [
 			E('div', { 'id' : 'command-output'},
 				E('textarea', {
 					'id': 'widget.command-output',
@@ -73,9 +73,9 @@ return view.extend({
 					'rows': '20'
 				})
 			)
-			]),
+			]);
 
-			view = E('div', { 'class': 'cbi-map'}, [
+		let view = E('div', { 'class': 'cbi-map'}, [
 			E('h2', {}, [ _('NoPorts atSign Enrollment') ]),
 			atsign ? E([]) : E('div', { 'class': 'cbi-map-descr'}, _('atSign must be configured')),
 			device ? E([]) : E('div', { 'class': 'cbi-map-descr'}, _('Device must be configured')),

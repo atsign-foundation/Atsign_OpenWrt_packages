@@ -10,21 +10,21 @@
 		}
 	},
 
-  "admin/network/sshnpd/config": {
-    "title": "NoPorts Config",
-    "order": 1,
-    "action": {
-      "type": "view",
-      "path": "sshnpd/config"
-    }
-  },
+	"admin/network/sshnpd/config": {
+		"title": "NoPorts Config",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "sshnpd/config"
+		}
+	},
 
-  "admin/network/sshnpd/enroll": {
-    "title": "NoPorts Enrollment",
-    "order": 2,
-    "action": {
-      "type": "view",
-      "path": "sshnpd/enroll"
-    }
-  }
+	"admin/network/sshnpd/enroll": {
+		"title": "NoPorts Enrollment",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "sshnpd/enroll"
+		}
+	}
 }

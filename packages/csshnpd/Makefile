@@ -11,6 +11,14 @@ PKG_SOURCE:=$(PKG_NAME)-c$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://github.com/atsign-foundation/noports/releases/download/c$(PKG_VERSION)
 PKG_HASH:=61e2142992a58fb232d4f194be90c324cd568ee9013d7ef9c3b70d75fccb5bac
 
+CURL_VERSION:=8.23.0
+CURL_HASH:=8dadd7d2536a314f982ad05a651b713f426bf7d02cc2c76cffb9796f2218e6c5
+# Transforms 'x.y.z' into 'x_y_z' to match curl's GitHub tag convention
+CURL_TAG:=curl-$(subst .,_,$(CURL_VERSION))
+CURL_FILE:=curl-$(CURL_VERSION).tar.xz
+CURL_URL:=https://github.com/curl/curl/releases/download/$(CURL_TAG)/
+
+
 PKG_MAINTAINER:=Chris Swan <chris@atsign.com>
 PKG_LICENSE:=BSD-3-Clause
 PKG_LICENSE_FILES:=LICENCE
@@ -25,7 +33,8 @@ CMAKE_OPTIONS += \
 	-DCMAKE_C_COMPILER=$(TARGET_CC) \
 	-DNOPORTS_MBEDTLS_PATH="deps/mbedtls-src" \
 	-DNOPORTS_CJSON_PATH="deps/cjson-src" \
-	-DNOPORTS_ATSDK_PATH="deps/atsdk-src"\
+	-DNOPORTS_ATSDK_PATH="deps/atsdk-src" \
+	-DFETCHCONTENT_SOURCE_DIR_CURL=$(PKG_BUILD_DIR)/deps/curl-$(CURL_VERSION) \
 	-DBUILD_SHARED_LIBS="OFF" \
 	-DCMAKE_BUILD_TYPE="Release" \
 	-DCMAKE_C_FLAGS="-std=c99 -Wno-error -Wextra -Werror-implicit-function-declaration -fPIC -fhonour-copts" \
@@ -41,6 +50,19 @@ CMAKE_OPTIONS += \
 	-DBUILD_SHARED_AND_STATIC_LIBS="OFF" \
 	-DENABLE_TARGET_EXPORT="OFF" \
 	-DENABLE_CJSON_VERSION_SO="OFF"
+
+define Download/curl
+  FILE:=$(CURL_FILE)
+  URL:=$(CURL_URL)
+  HASH:=$(CURL_HASH)
+endef
+
+define Build/Prepare
+	$(call Build/Prepare/Default)
+	# Extract or stage the downloaded curl archive into the source directory
+	mkdir -p $(PKG_BUILD_DIR)/deps
+	tar -xJf $(DL_DIR)/$(CURL_FILE) -C $(PKG_BUILD_DIR)/deps/
+endef
 
 define Package/csshnpd
 	SECTION:=net
@@ -72,4 +94,5 @@ define Package/csshnpd/install
 		$(1)/etc/config/sshnpd
 endef
 
+$(eval $(call Download,curl))
 $(eval $(call BuildPackage,csshnpd))
